@@ -15,7 +15,7 @@ import { Signup } from "./pages/Signup";
 // }
 
 // export default App;
-import { HashRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 function App() {
   return (
