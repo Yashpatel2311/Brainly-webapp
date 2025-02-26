@@ -6,8 +6,8 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 export function Signin() {
-  const usernameref = useRef<HTMLInputElement>();
-  const passwordref = useRef<HTMLInputElement>();
+  const usernameref = useRef<HTMLInputElement>(null);
+  const passwordref = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
   async function signin() {
     try {
