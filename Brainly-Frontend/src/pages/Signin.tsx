@@ -113,7 +113,7 @@ export function Signin() {
             Don't have an account?{" "}
             <span
               className="text-blue-500 cursor-pointer hover:underline"
-              onClick={() => navigate("/api/v1/signup")}
+              onClick={() => navigate("/signup")}
             >
               Sign up
             </span>
