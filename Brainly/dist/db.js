@@ -7,9 +7,25 @@ exports.Linkmodel = exports.Contentmodel = exports.Usermodel = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
 const mongoose_2 = require("mongoose");
 const Userschema = new mongoose_2.Schema({
-    username: { type: "string", unique: true, require: true },
-    password: { type: "string", unique: true, require: true },
+    username: {
+        type: String,
+        required: true,
+        unique: true,
+        trim: true,
+        minlength: 3,
+    },
+    password: {
+        type: String,
+        required: true,
+        minlength: 6,
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now,
+    },
 });
+// Add index for faster queries
+Userschema.index({ username: 1 });
 exports.Usermodel = (0, mongoose_2.model)("users", Userschema);
 // const contentTypes = [
 //   "image",

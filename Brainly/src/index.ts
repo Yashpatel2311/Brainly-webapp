@@ -1,159 +1,339 @@
-const mongoose = require("mongoose");
-mongoose.connect(
-  "mongodb+srv://theyashpatel2311:Yash.2311@cluster0.taqoa.mongodb.net/brainly-database"
-);
-import { JWT_SECRET } from "./config";
+import mongoose from "mongoose";
+import { JWT_SECRET, MONGODB_URI, PORT } from "./config";
 import jwt from "jsonwebtoken";
-import express from "express";
+import express, { Request, Response, NextFunction } from "express";
 import { Contentmodel, Linkmodel, Usermodel } from "./db";
 import { usermiddleware } from "./middleware";
 import { random } from "./utils";
 import cors from "cors";
-const app = express();
-app.use(express.json());
-app.use(cors());
 
-app.get("/", (req, res) => {
+const app = express();
+
+// Configure CORS
+app.use(
+  cors({
+    origin: ["http://localhost:5173", "http://localhost:3000"], // Add your frontend URLs
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
+
+app.use(express.json());
+
+// Error handling middleware
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+  console.error(err.stack);
+  res.status(500).json({
+    success: false,
+    message: "Something went wrong!",
+    error: process.env.NODE_ENV === "development" ? err.message : undefined,
+  });
+});
+
+// Connect to MongoDB with error handling
+mongoose
+  .connect(MONGODB_URI, {
+    serverSelectionTimeoutMS: 5000,
+    socketTimeoutMS: 45000,
+    family: 4,
+  })
+  .then(() => console.log("Connected to MongoDB"))
+  .catch((err) => {
+    console.error("MongoDB connection error:", err);
+    process.exit(1);
+  });
+
+// Add type for authenticated request
+interface AuthenticatedRequest extends Request {
+  userId?: string;
+}
+
+// Type for request handlers
+type AsyncRequestHandler = (
+  req: Request | AuthenticatedRequest,
+  res: Response,
+  next: NextFunction
+) => Promise<void>;
+
+app.get("/", (req: Request, res: Response) => {
   res.send("Backend is running! 🚀");
 });
-app.post("/api/v1/signup", async (req, res) => {
-  const username = req.body.username;
-  const password = req.body.password;
 
-  await Usermodel.create({
-    username: username,
-    password: password,
-  });
+app.post("/api/v1/signup", (async (req: Request, res: Response) => {
+  try {
+    const { username, password } = req.body;
 
-  res.status(200).json({
-    message: "user signed up!",
-  });
-});
-app.post("/api/v1/signin", async (req, res) => {
-  const username = req.body.username;
-  const password = req.body.password;
+    if (!username || !password) {
+      res.status(400).json({
+        message: "Username and password are required",
+        success: false,
+      });
+      return;
+    }
 
-  const existingUser = await Usermodel.findOne({
-    username,
-    password,
-  });
-  if (existingUser) {
+    const existingUser = await Usermodel.findOne({ username });
+    if (existingUser) {
+      res.status(400).json({
+        message: "Username already exists",
+        success: false,
+      });
+      return;
+    }
+
+    const newUser = await Usermodel.create({
+      username,
+      password,
+    });
+
+    // Generate token for immediate sign in after signup
+    const token = jwt.sign(
+      {
+        id: newUser._id,
+      },
+      JWT_SECRET,
+      { expiresIn: "24h" }
+    );
+
+    res.status(200).json({
+      message: "User signed up successfully!",
+      success: true,
+      token,
+      user: {
+        id: newUser._id,
+        username: newUser.username,
+      },
+      redirect: "/dashboard",
+    });
+  } catch (error) {
+    console.error("Signup error:", error);
+    res.status(500).json({
+      message: "Internal server error",
+      success: false,
+    });
+  }
+}) as AsyncRequestHandler);
+
+app.post("/api/v1/signin", (async (req: Request, res: Response) => {
+  try {
+    const { username, password } = req.body;
+    console.log("Signin attempt for username:", username);
+
+    // Validate input
+    if (!username || !password) {
+      console.log("Missing username or password");
+      return res.status(400).json({
+        message: "Username and password are required",
+        success: false,
+      });
+    }
+
+    // Find user
+    const existingUser = await Usermodel.findOne({ username });
+    console.log("User found:", existingUser ? "Yes" : "No");
+
+    if (!existingUser) {
+      console.log("User not found");
+      return res.status(401).json({
+        message: "Invalid username or password",
+        success: false,
+      });
+    }
+
+    // Check password
+    const isPasswordValid = existingUser.password === password;
+    console.log("Password valid:", isPasswordValid);
+
+    if (!isPasswordValid) {
+      console.log("Invalid password");
+      return res.status(401).json({
+        message: "Invalid username or password",
+        success: false,
+      });
+    }
+
+    // Generate token
     const token = jwt.sign(
       {
         id: existingUser._id,
       },
-      JWT_SECRET
+      JWT_SECRET,
+      { expiresIn: "24h" }
     );
-    res.json({ token });
-  } else {
-    res.status(403).json({ message: "user is not sign up!" });
+
+    console.log("Signin successful, token generated");
+
+    // Send response
+    res.status(200).json({
+      message: "Sign in successful!",
+      success: true,
+      token,
+      user: {
+        id: existingUser._id,
+        username: existingUser.username,
+      },
+    });
+  } catch (error) {
+    console.error("Signin error:", error);
+    res.status(500).json({
+      message: "Internal server error",
+      success: false,
+    });
   }
-});
-app.post("/api/v1/content", usermiddleware, async (req, res) => {
-  const { link, type, title } = req.body;
-  // Create a new content entry linked to the logged-in user.
-  await Contentmodel.create({
-    link,
-    type,
-    title,
-    //@ts-ignore
-    userId: req.userId, // userId is added by the middleware.
-    tags: [], // Initialize tags as an empty array.
-  });
+}) as AsyncRequestHandler);
 
-  res.json({ message: "Content added" }); // Send success response.
-});
+app.post("/api/v1/content", usermiddleware, (async (
+  req: AuthenticatedRequest,
+  res: Response
+) => {
+  try {
+    const { link, type, title } = req.body;
+    if (!req.userId) {
+      res.status(401).json({ message: "Unauthorized" });
+      return;
+    }
 
-app.get("/api/v1/content", usermiddleware, async (req, res) => {
-  //@ts-ignore
-  const userId = req.userId; // User ID is fetched from middleware
-  // Fetch all content associated with the user ID and populate username
-  // The `populate` function is used to include additional details from the referenced `userId`.
-  // For example, it will fetch the username linked to the userId.
-  // Since we specified "username", only the username will be included in the result,
-  // and other details like password won’t be fetched.
-  const content = await Contentmodel.find({ userId: userId }).populate(
-    "userId",
-    "username"
-  );
-  res.json({ content }); // Send the content as response
-});
-app.delete("/api/v1/content", usermiddleware, async (req, res) => {
-  const contentId = req.body.contentId;
+    await Contentmodel.create({
+      link,
+      type,
+      title,
+      userId: req.userId,
+      tags: [],
+    });
 
-  await Contentmodel.deleteMany({
-    contentId: contentId,
-    //@ts-ignore
-    userId: req.userId,
-  });
-  res.json({
-    message: "deleted",
-  });
-});
-app.post("/api/v1/brain/share", usermiddleware, async (req, res) => {
-  const share = req.body.share;
-  if (share) {
-    const existinglink = await Linkmodel.findOne({
-      //@ts-ignore
+    res.json({ message: "Content added" });
+  } catch (error) {
+    console.error("Content creation error:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}) as AsyncRequestHandler);
+
+app.get("/api/v1/content", usermiddleware, (async (
+  req: AuthenticatedRequest,
+  res: Response
+) => {
+  try {
+    if (!req.userId) {
+      res.status(401).json({ message: "Unauthorized" });
+      return;
+    }
+
+    const content = await Contentmodel.find({ userId: req.userId }).populate(
+      "userId",
+      "username"
+    );
+    res.json({ content });
+  } catch (error) {
+    console.error("Content fetch error:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}) as AsyncRequestHandler);
+
+app.delete("/api/v1/content", usermiddleware, (async (
+  req: AuthenticatedRequest,
+  res: Response
+) => {
+  try {
+    const { contentId } = req.body;
+    if (!req.userId) {
+      res.status(401).json({ message: "Unauthorized" });
+      return;
+    }
+
+    await Contentmodel.deleteMany({
+      contentId,
       userId: req.userId,
     });
-    if (existinglink) {
+    res.json({
+      message: "deleted",
+    });
+  } catch (error) {
+    console.error("Content deletion error:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}) as AsyncRequestHandler);
+
+app.post("/api/v1/brain/share", usermiddleware, (async (
+  req: AuthenticatedRequest,
+  res: Response
+) => {
+  try {
+    const { share } = req.body;
+    if (!req.userId) {
+      res.status(401).json({ message: "Unauthorized" });
+      return;
+    }
+
+    if (share) {
+      const existinglink = await Linkmodel.findOne({
+        userId: req.userId,
+      });
+      if (existinglink) {
+        res.json({
+          hash: existinglink.hash,
+        });
+        return;
+      }
+      const hash = random(10);
+      await Linkmodel.create({
+        userId: req.userId,
+        hash: hash,
+      });
       res.json({
-        hash: existinglink.hash,
+        hash,
+      });
+    } else {
+      await Linkmodel.deleteOne({
+        userId: req.userId,
+      });
+      res.json({
+        message: "Removed Link",
+      });
+    }
+  } catch (error) {
+    console.error("Share error:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}) as AsyncRequestHandler);
+
+app.get("/api/v1/brain/:shareLink", (async (req: Request, res: Response) => {
+  try {
+    const hash = req.params.shareLink;
+
+    const link = await Linkmodel.findOne({
+      hash,
+    });
+
+    if (!link) {
+      res.status(411).json({
+        message: "Sorry incorrect input",
       });
       return;
     }
-    const hash = random(10);
-    await Linkmodel.create({
-      //@ts-ignore
-      userId: req.userId,
-      hash: hash,
+
+    const content = await Contentmodel.find({
+      userId: link.userId,
     });
+    const user = await Usermodel.findOne({
+      _id: link.userId,
+    });
+    if (!user) {
+      res.status(411).json({
+        message: "user not found",
+      });
+      return;
+    }
+
     res.json({
-      hash,
+      username: user.username,
+      content: content,
     });
-  } else {
-    await Linkmodel.deleteOne({
-      //@ts-ignore
-      userId: req.userId,
-    });
-    res.json({
-      message: "Removed Link",
-    });
+  } catch (error) {
+    console.error("Share link error:", error);
+    res.status(500).json({ message: "Internal server error" });
   }
+}) as AsyncRequestHandler);
+
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
-
-app.get("/api/v1/brain/:shareLink", async (req, res) => {
-  const hash = req.params.shareLink;
-
-  const link = await Linkmodel.findOne({
-    hash,
-  });
-
-  if (!link) {
-    res.status(411).json({
-      message: "Sorry incorrect input",
-    });
-    return;
-  }
-  //userId
-  const content = await Contentmodel.find({
-    userId: link.userId,
-  });
-  const user = await Usermodel.findOne({
-    _id: link.userId,
-  });
-  if (!user) {
-    res.status(411).json({
-      message: "user not found",
-    });
-    return;
-  }
-
-  res.json({
-    username: user.username,
-    content: content,
-  });
-});
-
-app.listen(3000);

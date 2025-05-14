@@ -4,8 +4,10 @@ import { Card } from "../components/Card";
 import { CreateContentModal } from "../components/CreateContentModal";
 import { PlusIcon } from "../Icons/PlusIcon";
 import { ShareIcon } from "../Icons/ShareIcon";
+import { SignOutIcon } from "../Icons/SignOutIcon";
 import { Sidebar } from "../components/Sidebar";
 import { useContent } from "../hooks/useContent";
+import { useAuth } from "../contexts/AuthContext";
 import axios from "axios";
 import { BACKEND_URL } from "../config";
 // import { BACKEND_URL } from "../config";
@@ -13,6 +15,7 @@ import { BACKEND_URL } from "../config";
 export function Dashboard() {
   const [ModalOpen, setModalOpen] = useState(false);
   const { contents, refresh } = useContent();
+  const { signout } = useAuth();
   console.log("Contents in ds:", contents);
   useEffect(() => {
     refresh();
@@ -77,6 +80,12 @@ export function Dashboard() {
             variant="secondary"
             text="Share Brain"
             startIcon={<ShareIcon />}
+          />
+          <Button
+            onClick={signout}
+            variant="secondary"
+            text="Sign Out"
+            startIcon={<SignOutIcon />}
           />
         </div>
         <div className="flex gap-4 flex-wrap">

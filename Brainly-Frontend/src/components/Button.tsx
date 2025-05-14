@@ -4,9 +4,10 @@ interface Buttonprops {
   variant: "primary" | "secondary";
   text: string;
   startIcon?: ReactElement;
-  onClick?: () => void;
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   fullWidth?: boolean;
   loading?: boolean;
+  type?: "button" | "submit" | "reset";
 }
 
 const variantClasses = {
@@ -23,9 +24,11 @@ export function Button({
   startIcon,
   fullWidth,
   onClick,
+  type = "button",
 }: Buttonprops) {
   return (
     <button
+      type={type}
       onClick={onClick}
       className={
         variantClasses[variant] +

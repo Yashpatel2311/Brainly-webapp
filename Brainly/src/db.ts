@@ -2,9 +2,26 @@ import mongoose from "mongoose";
 import { model, Schema } from "mongoose";
 
 const Userschema = new Schema({
-  username: { type: "string", unique: true, require: true },
-  password: { type: "string", unique: true, require: true },
+  username: {
+    type: String,
+    required: true,
+    unique: true,
+    trim: true,
+    minlength: 3,
+  },
+  password: {
+    type: String,
+    required: true,
+    minlength: 6,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
+
+// Add index for faster queries
+Userschema.index({ username: 1 });
 
 export const Usermodel = model("users", Userschema);
 
