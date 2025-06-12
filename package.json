@@ -1,5 +1,6 @@
 {
   "dependencies": {
+<<<<<<< HEAD
     "@google-cloud/local-auth": "^3.0.1",
     "@types/bcryptjs": "^2.4.6",
     "@types/react-icons": "^2.2.7",
@@ -13,5 +14,9 @@
     "react-icons": "^5.5.0",
     "twitter-api-v2": "^1.23.2",
     "youtube-transcript": "^1.2.1"
+=======
+    "framer-motion": "^12.11.0",
+    "lottie-react": "^2.4.1"
+>>>>>>> fa11b1cc25f48465ee748947c0713874aae21b57
   }
 }

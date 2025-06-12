@@ -54,7 +54,11 @@ export function CreateContentModal({ open, onClose }: CreateContentModalProps) {
       },
       {
         headers: {
+<<<<<<< HEAD
           Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
+=======
+          Authorization: localStorage.getItem("token") || "",
+>>>>>>> fa11b1cc25f48465ee748947c0713874aae21b57
         },
       }
     );

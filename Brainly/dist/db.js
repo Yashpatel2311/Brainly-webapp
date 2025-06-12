@@ -1,4 +1,5 @@
 "use strict";
+<<<<<<< HEAD
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -8,6 +9,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+=======
+>>>>>>> fa11b1cc25f48465ee748947c0713874aae21b57
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -15,7 +18,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Linkmodel = exports.Contentmodel = exports.Usermodel = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
 const mongoose_2 = require("mongoose");
+<<<<<<< HEAD
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
+=======
+>>>>>>> fa11b1cc25f48465ee748947c0713874aae21b57
 const Userschema = new mongoose_2.Schema({
     username: {
         type: String,
@@ -24,6 +30,7 @@ const Userschema = new mongoose_2.Schema({
         trim: true,
         minlength: 3,
     },
+<<<<<<< HEAD
     email: {
         type: String,
         required: true,
@@ -31,6 +38,8 @@ const Userschema = new mongoose_2.Schema({
         trim: true,
         lowercase: true,
     },
+=======
+>>>>>>> fa11b1cc25f48465ee748947c0713874aae21b57
     password: {
         type: String,
         required: true,
@@ -40,6 +49,7 @@ const Userschema = new mongoose_2.Schema({
         type: Date,
         default: Date.now,
     },
+<<<<<<< HEAD
     lastLogin: {
         type: Date,
         default: Date.now,
@@ -60,6 +70,11 @@ Userschema.methods.comparePassword = function (candidatePassword) {
         return bcryptjs_1.default.compare(candidatePassword, this.password);
     });
 };
+=======
+});
+// Add index for faster queries
+Userschema.index({ username: 1 });
+>>>>>>> fa11b1cc25f48465ee748947c0713874aae21b57
 exports.Usermodel = (0, mongoose_2.model)("users", Userschema);
 // const contentTypes = [
 //   "image",

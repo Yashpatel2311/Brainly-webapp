@@ -11,6 +11,7 @@
     "start": "react-scripts start"
   },
   "dependencies": {
+<<<<<<< HEAD
     "@types/react-icons": "^2.2.7",
     "axios": "^1.7.9",
     "framer-motion": "^12.17.0",
@@ -18,6 +19,11 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-icons": "^5.5.0",
+=======
+    "axios": "^1.7.9",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+>>>>>>> fa11b1cc25f48465ee748947c0713874aae21b57
     "react-router-dom": "^7.1.5"
   },
   "devDependencies": {

@@ -20,11 +20,15 @@
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^7.6.8",
+<<<<<<< HEAD
     "openai": "^5.3.0",
     "typescript": "^5.3.3"
   },
   "devDependencies": {
     "@types/axios": "^0.9.36",
     "@types/cheerio": "^0.22.35"
+=======
+    "typescript": "^5.3.3"
+>>>>>>> fa11b1cc25f48465ee748947c0713874aae21b57
   }
 }

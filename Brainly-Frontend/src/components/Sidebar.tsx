@@ -2,6 +2,7 @@ import { Logo } from "../Icons/Logo";
 import { TwitterIcon } from "../Icons/TwitterIcon";
 import { YoutubeIcon } from "../Icons/YoutubeIcon";
 import { SidebarItem } from "./SidebarItem";
+<<<<<<< HEAD
 import { motion } from "framer-motion";
 
 interface SidebarProps {
@@ -17,6 +18,12 @@ export function Sidebar({ selectedType, onSelectType }: SidebarProps) {
       transition={{ type: "spring", stiffness: 100, damping: 20 }}
       className="h-screen bg-gradient-to-b from-purple-800 to-gray-800 text-white w-72 fixed left-0 top-0 pl-6"
     >
+=======
+
+export function Sidebar() {
+  return (
+    <div className="h-screen bg-gradient-to-b from-purple-800 to-gray-800 text-white w-72 fixed left-0 top-0 pl-6">
+>>>>>>> fa11b1cc25f48465ee748947c0713874aae21b57
       <div className="flex items-center text-3xl pt-8">
         <div className="pr-2 text-purple-400">
           <Logo />
@@ -25,6 +32,7 @@ export function Sidebar({ selectedType, onSelectType }: SidebarProps) {
       </div>
 
       <div className="pt-12 pl-4 space-y-6">
+<<<<<<< HEAD
         <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
           <SidebarItem
             text="All"
@@ -51,5 +59,11 @@ export function Sidebar({ selectedType, onSelectType }: SidebarProps) {
         </motion.div>
       </div>
     </motion.div>
+=======
+        <SidebarItem text="Twitter" icon={<TwitterIcon />} />
+        <SidebarItem text="Youtube" icon={<YoutubeIcon />} />
+      </div>
+    </div>
+>>>>>>> fa11b1cc25f48465ee748947c0713874aae21b57
   );
 }

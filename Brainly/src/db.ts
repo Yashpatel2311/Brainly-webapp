@@ -1,6 +1,9 @@
 import mongoose from "mongoose";
 import { model, Schema } from "mongoose";
+<<<<<<< HEAD
 import bcrypt from "bcryptjs";
+=======
+>>>>>>> fa11b1cc25f48465ee748947c0713874aae21b57
 
 const Userschema = new Schema({
   username: {
@@ -10,6 +13,7 @@ const Userschema = new Schema({
     trim: true,
     minlength: 3,
   },
+<<<<<<< HEAD
   email: {
     type: String,
     required: true,
@@ -17,6 +21,8 @@ const Userschema = new Schema({
     trim: true,
     lowercase: true,
   },
+=======
+>>>>>>> fa11b1cc25f48465ee748947c0713874aae21b57
   password: {
     type: String,
     required: true,
@@ -26,6 +32,7 @@ const Userschema = new Schema({
     type: Date,
     default: Date.now,
   },
+<<<<<<< HEAD
   lastLogin: {
     type: Date,
     default: Date.now,
@@ -46,6 +53,12 @@ Userschema.methods.comparePassword = async function (
 ) {
   return bcrypt.compare(candidatePassword, this.password);
 };
+=======
+});
+
+// Add index for faster queries
+Userschema.index({ username: 1 });
+>>>>>>> fa11b1cc25f48465ee748947c0713874aae21b57
 
 export const Usermodel = model("users", Userschema);
 
