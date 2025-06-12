@@ -3,10 +3,7 @@ import { Button } from "../components/Button";
 import { Input } from "../components/Input";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
-<<<<<<< HEAD
 import { Card } from "../components/Card";
-=======
->>>>>>> fa11b1cc25f48465ee748947c0713874aae21b57
 
 interface ValidationErrors {
   username?: string;
@@ -73,7 +70,6 @@ export function Signin() {
   };
 
   return (
-<<<<<<< HEAD
     <div
       className="min-h-screen flex items-center justify-center relative overflow-hidden"
       style={{ backgroundColor: "#7766C6", padding: 0 }}
@@ -101,6 +97,7 @@ export function Signin() {
             title="Naval"
             link="https://twitter.com/naval/status/1002103360646823936"
             isInteractive={false}
+            _id={""}
           />
         </div>
         <div
@@ -112,6 +109,7 @@ export function Signin() {
             title="Steve Jobs' 2005 Stanford Speech"
             link="https://www.youtube.com/watch?v=UF8uR6Z6KLc"
             isInteractive={false}
+            _id={""}
           />
         </div>
         <div
@@ -123,6 +121,7 @@ export function Signin() {
             title="Jack Dorsey"
             link="https://twitter.com/jack/status/20"
             isInteractive={false}
+            _id={""}
           />
         </div>
         {/* Main Signin Card */}
@@ -183,62 +182,6 @@ export function Signin() {
               </Link>
             </p>
           </div>
-=======
-    <div className="h-screen w-screen bg-purple-600 flex justify-center items-center overflow-hidden">
-      <div className="bg-white rounded-xl border border-gray-300 min-w-48 p-8 shadow-lg relative">
-        <h2 className="text-3xl font-semibold text-center mb-6 text-gray-800">
-          Sign In
-        </h2>
-
-        {error && (
-          <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-lg text-sm">
-            {error}
-          </div>
-        )}
-
-        <form onSubmit={handleSubmit} className="space-y-2">
-          <Input
-            placeholder="Username"
-            value={username}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setUsername(e.target.value)
-            }
-            required
-            minLength={3}
-            error={validationErrors.username}
-          />
-          <Input
-            placeholder="Password"
-            type="password"
-            value={password}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setPassword(e.target.value)
-            }
-            required
-            minLength={6}
-            error={validationErrors.password}
-          />
-
-          <div className="flex justify-center pt-4">
-            <div className="w-full">
-              <Button
-                type="submit"
-                variant="primary"
-                text={loading ? "Signing in..." : "Sign In"}
-                fullWidth={true}
-              />
-            </div>
-          </div>
-        </form>
-
-        <div className="mt-6 text-center text-black">
-          <p>
-            Don't have an account?{" "}
-            <Link to="/signup" className="hover:underline text-purple-600">
-              Sign Up
-            </Link>
-          </p>
->>>>>>> fa11b1cc25f48465ee748947c0713874aae21b57
         </div>
       </div>
     </div>

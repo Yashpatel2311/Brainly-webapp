@@ -4,10 +4,7 @@ import { authService } from "../services/api";
 interface User {
   id: string;
   username: string;
-<<<<<<< HEAD
   email: string;
-=======
->>>>>>> fa11b1cc25f48465ee748947c0713874aae21b57
 }
 
 interface AuthContextType {
@@ -15,15 +12,11 @@ interface AuthContextType {
   loading: boolean;
   error: string | null;
   signin: (username: string, password: string) => Promise<boolean>;
-<<<<<<< HEAD
   signup: (
     username: string,
     email: string,
     password: string
   ) => Promise<boolean>;
-=======
-  signup: (username: string, password: string) => Promise<boolean>;
->>>>>>> fa11b1cc25f48465ee748947c0713874aae21b57
   signout: () => void;
 }
 
@@ -38,7 +31,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   useEffect(() => {
     // Check if user is logged in on mount
-<<<<<<< HEAD
     const checkAuth = async () => {
       try {
         const storedUser = localStorage.getItem("user");
@@ -65,18 +57,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     };
 
     checkAuth();
-=======
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      try {
-        setUser(JSON.parse(storedUser));
-      } catch (e) {
-        localStorage.removeItem("user");
-        localStorage.removeItem("token");
-      }
-    }
-    setLoading(false);
->>>>>>> fa11b1cc25f48465ee748947c0713874aae21b57
   }, []);
 
   const signin = async (username: string, password: string) => {
@@ -96,17 +76,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
-<<<<<<< HEAD
   const signup = async (username: string, email: string, password: string) => {
     try {
       setError(null);
       const response = await authService.signup(username, email, password);
-=======
-  const signup = async (username: string, password: string) => {
-    try {
-      setError(null);
-      const response = await authService.signup(username, password);
->>>>>>> fa11b1cc25f48465ee748947c0713874aae21b57
       if (response.success) {
         setUser(response.user);
         return true;

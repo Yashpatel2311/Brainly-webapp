@@ -1,22 +1,34 @@
 {
+  "name": "brainly",
+  "version": "1.0.0",
+  "description": "Brainly - A platform for sharing and discovering content",
+  "private": true,
+  "workspaces": [
+    "Brainly",
+    "Brainly-Frontend"
+  ],
+  "scripts": {
+    "dev:backend": "cd Brainly && npm run dev",
+    "dev:frontend": "cd Brainly-Frontend && npm run dev",
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "build": "npm run build:backend && npm run build:frontend",
+    "build:backend": "cd Brainly && npm run build",
+    "build:frontend": "cd Brainly-Frontend && npm run build",
+    "install:all": "npm install && npm run install:backend && npm run install:frontend",
+    "install:backend": "cd Brainly && npm install",
+    "install:frontend": "cd Brainly-Frontend && npm install",
+    "lint": "npm run lint:backend && npm run lint:frontend",
+    "lint:backend": "cd Brainly && npm run lint",
+    "lint:frontend": "cd Brainly-Frontend && npm run lint",
+    "test": "npm run test:backend && npm run test:frontend",
+    "test:backend": "cd Brainly && npm run test",
+    "test:frontend": "cd Brainly-Frontend && npm run test"
+  },
   "dependencies": {
-<<<<<<< HEAD
-    "@google-cloud/local-auth": "^3.0.1",
-    "@types/bcryptjs": "^2.4.6",
-    "@types/react-icons": "^2.2.7",
-    "bcryptjs": "^3.0.2",
-    "dotenv": "^16.5.0",
-    "express-rate-limit": "^7.5.0",
-    "framer-motion": "^12.11.0",
-    "google-auth-library": "^9.15.1",
-    "googleapis": "^150.0.1",
-    "lottie-react": "^2.4.1",
-    "react-icons": "^5.5.0",
-    "twitter-api-v2": "^1.23.2",
-    "youtube-transcript": "^1.2.1"
-=======
-    "framer-motion": "^12.11.0",
-    "lottie-react": "^2.4.1"
->>>>>>> fa11b1cc25f48465ee748947c0713874aae21b57
+    "concurrently": "^8.2.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.19",
+    "typescript": "^5.3.3"
   }
 }

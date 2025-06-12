@@ -31,26 +31,16 @@ api.interceptors.response.use(
       // Handle unauthorized access
       localStorage.removeItem("token");
       localStorage.removeItem("user");
-<<<<<<< HEAD
       window.location.href = "/signin";
-=======
-      window.location.href = "/login";
->>>>>>> fa11b1cc25f48465ee748947c0713874aae21b57
     }
     return Promise.reject(error);
   }
 );
 
 export const authService = {
-<<<<<<< HEAD
   signup: async (username: string, email: string, password: string) => {
     try {
       const response = await api.post("/signup", { username, email, password });
-=======
-  signup: async (username: string, password: string) => {
-    try {
-      const response = await api.post("/signup", { username, password });
->>>>>>> fa11b1cc25f48465ee748947c0713874aae21b57
       if (response.data.success) {
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("user", JSON.stringify(response.data.user));
@@ -83,7 +73,6 @@ export const authService = {
     localStorage.removeItem("user");
     window.location.href = "/signin";
   },
-<<<<<<< HEAD
 
   // Check if user is authenticated
   isAuthenticated: () => {
@@ -97,8 +86,6 @@ export const authService = {
     const user = localStorage.getItem("user");
     return user ? JSON.parse(user) : null;
   },
-=======
->>>>>>> fa11b1cc25f48465ee748947c0713874aae21b57
 };
 
 export const contentService = {
@@ -126,9 +113,9 @@ export const contentService = {
     }
   },
 
-  deleteContent: async (contentId: string) => {
+  deleteContent: async (_id: string) => {
     try {
-      const response = await api.delete("/content", { data: { contentId } });
+      const response = await api.delete("/content", { data: { _id } });
       return response.data;
     } catch (error: any) {
       throw new Error(

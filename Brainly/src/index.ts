@@ -6,7 +6,6 @@ import { Contentmodel, Linkmodel, Usermodel } from "./db";
 import { usermiddleware } from "./middleware";
 import { random } from "./utils";
 import cors from "cors";
-<<<<<<< HEAD
 import rateLimit from "express-rate-limit";
 import bcrypt from "bcryptjs";
 
@@ -19,15 +18,14 @@ const authLimiter = rateLimit({
   message: "Too many login attempts, please try again after 15 minutes",
 });
 
-=======
-
-const app = express();
-
->>>>>>> fa11b1cc25f48465ee748947c0713874aae21b57
 // Configure CORS
 app.use(
   cors({
-    origin: ["http://localhost:5173", "http://localhost:3000"], // Add your frontend URLs
+    origin: [
+      "http://localhost:5173",
+      "http://localhost:5174",
+      "http://localhost:3000",
+    ], // Add your frontend URLs
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
@@ -75,7 +73,6 @@ app.get("/", (req: Request, res: Response) => {
   res.send("Backend is running! 🚀");
 });
 
-<<<<<<< HEAD
 app.post("/api/v1/signup", authLimiter, (async (
   req: Request,
   res: Response
@@ -86,26 +83,25 @@ app.post("/api/v1/signup", authLimiter, (async (
     if (!username || !email || !password) {
       res.status(400).json({
         message: "Username, email and password are required",
-=======
-app.post("/api/v1/signup", (async (req: Request, res: Response) => {
-  try {
-    const { username, password } = req.body;
-
-    if (!username || !password) {
-      res.status(400).json({
-        message: "Username and password are required",
->>>>>>> fa11b1cc25f48465ee748947c0713874aae21b57
         success: false,
       });
       return;
     }
 
-<<<<<<< HEAD
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       res.status(400).json({
         message: "Invalid email format",
+        success: false,
+      });
+      return;
+    }
+
+    // Validate password strength
+    if (password.length < 6) {
+      res.status(400).json({
+        message: "Password must be at least 6 characters long",
         success: false,
       });
       return;
@@ -118,41 +114,24 @@ app.post("/api/v1/signup", (async (req: Request, res: Response) => {
     if (existingUser) {
       res.status(400).json({
         message: "Username or email already exists",
-=======
-    const existingUser = await Usermodel.findOne({ username });
-    if (existingUser) {
-      res.status(400).json({
-        message: "Username already exists",
->>>>>>> fa11b1cc25f48465ee748947c0713874aae21b57
         success: false,
       });
       return;
     }
 
+    // Hash password before saving
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     const newUser = await Usermodel.create({
       username,
-<<<<<<< HEAD
       email,
-      password,
+      password: hashedPassword,
+      createdAt: new Date(),
     });
 
-=======
-      password,
+    const token = jwt.sign({ id: newUser._id }, JWT_SECRET, {
+      expiresIn: "7d",
     });
-
-    // Generate token for immediate sign in after signup
->>>>>>> fa11b1cc25f48465ee748947c0713874aae21b57
-    const token = jwt.sign(
-      {
-        id: newUser._id,
-      },
-      JWT_SECRET,
-<<<<<<< HEAD
-      { expiresIn: "7d" } // Increased token expiry to 7 days
-=======
-      { expiresIn: "24h" }
->>>>>>> fa11b1cc25f48465ee748947c0713874aae21b57
-    );
 
     res.status(200).json({
       message: "User signed up successfully!",
@@ -161,10 +140,7 @@ app.post("/api/v1/signup", (async (req: Request, res: Response) => {
       user: {
         id: newUser._id,
         username: newUser.username,
-<<<<<<< HEAD
         email: newUser.email,
-=======
->>>>>>> fa11b1cc25f48465ee748947c0713874aae21b57
       },
       redirect: "/dashboard",
     });
@@ -177,7 +153,6 @@ app.post("/api/v1/signup", (async (req: Request, res: Response) => {
   }
 }) as AsyncRequestHandler);
 
-<<<<<<< HEAD
 app.post("/api/v1/signin", authLimiter, (async (
   req: Request,
   res: Response
@@ -186,86 +161,41 @@ app.post("/api/v1/signin", authLimiter, (async (
     const { username, password } = req.body;
 
     if (!username || !password) {
-=======
-app.post("/api/v1/signin", (async (req: Request, res: Response) => {
-  try {
-    const { username, password } = req.body;
-    console.log("Signin attempt for username:", username);
-
-    // Validate input
-    if (!username || !password) {
-      console.log("Missing username or password");
->>>>>>> fa11b1cc25f48465ee748947c0713874aae21b57
       return res.status(400).json({
         message: "Username and password are required",
         success: false,
       });
     }
 
-<<<<<<< HEAD
     const existingUser = await Usermodel.findOne({ username });
 
     if (!existingUser) {
-=======
-    // Find user
-    const existingUser = await Usermodel.findOne({ username });
-    console.log("User found:", existingUser ? "Yes" : "No");
-
-    if (!existingUser) {
-      console.log("User not found");
->>>>>>> fa11b1cc25f48465ee748947c0713874aae21b57
       return res.status(401).json({
         message: "Invalid username or password",
         success: false,
       });
     }
 
-<<<<<<< HEAD
     const isPasswordValid = await bcrypt.compare(
       password,
       existingUser.password
     );
 
     if (!isPasswordValid) {
-=======
-    // Check password
-    const isPasswordValid = existingUser.password === password;
-    console.log("Password valid:", isPasswordValid);
-
-    if (!isPasswordValid) {
-      console.log("Invalid password");
->>>>>>> fa11b1cc25f48465ee748947c0713874aae21b57
       return res.status(401).json({
         message: "Invalid username or password",
         success: false,
       });
     }
 
-<<<<<<< HEAD
     // Update last login
     existingUser.lastLogin = new Date();
     await existingUser.save();
 
-=======
-    // Generate token
->>>>>>> fa11b1cc25f48465ee748947c0713874aae21b57
-    const token = jwt.sign(
-      {
-        id: existingUser._id,
-      },
-      JWT_SECRET,
-<<<<<<< HEAD
-      { expiresIn: "7d" } // Increased token expiry to 7 days
-    );
+    const token = jwt.sign({ id: existingUser._id }, JWT_SECRET, {
+      expiresIn: "7d",
+    });
 
-=======
-      { expiresIn: "24h" }
-    );
-
-    console.log("Signin successful, token generated");
-
-    // Send response
->>>>>>> fa11b1cc25f48465ee748947c0713874aae21b57
     res.status(200).json({
       message: "Sign in successful!",
       success: true,
@@ -273,10 +203,7 @@ app.post("/api/v1/signin", (async (req: Request, res: Response) => {
       user: {
         id: existingUser._id,
         username: existingUser.username,
-<<<<<<< HEAD
         email: existingUser.email,
-=======
->>>>>>> fa11b1cc25f48465ee748947c0713874aae21b57
       },
     });
   } catch (error) {
@@ -340,17 +267,12 @@ app.delete("/api/v1/content", usermiddleware, (async (
   res: Response
 ) => {
   try {
-<<<<<<< HEAD
     const { _id } = req.body;
-=======
-    const { contentId } = req.body;
->>>>>>> fa11b1cc25f48465ee748947c0713874aae21b57
     if (!req.userId) {
       res.status(401).json({ message: "Unauthorized" });
       return;
     }
 
-<<<<<<< HEAD
     if (!_id) {
       res.status(400).json({ message: "Content ID is required" });
       return;
@@ -377,18 +299,6 @@ app.delete("/api/v1/content", usermiddleware, (async (
     } else {
       res.status(500).json({ message: "Internal server error" });
     }
-=======
-    await Contentmodel.deleteMany({
-      contentId,
-      userId: req.userId,
-    });
-    res.json({
-      message: "deleted",
-    });
-  } catch (error) {
-    console.error("Content deletion error:", error);
-    res.status(500).json({ message: "Internal server error" });
->>>>>>> fa11b1cc25f48465ee748947c0713874aae21b57
   }
 }) as AsyncRequestHandler);
 

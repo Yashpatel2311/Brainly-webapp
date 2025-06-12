@@ -41,28 +41,62 @@ export function CreateContentModal({ open, onClose }: CreateContentModalProps) {
   const titleRef = useRef<HTMLInputElement>(null);
   const linkRef = useRef<HTMLInputElement>(null);
   const [type, setType] = useState(ContentType.Youtube);
+  const [error, setError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   async function addContent() {
-    const title = titleRef.current?.value;
-    const link = linkRef.current?.value;
-    await axios.post(
-      `${BACKEND_URL}/api/v1/content`,
-      {
-        link,
-        title,
-        type,
-      },
-      {
-        headers: {
-<<<<<<< HEAD
-          Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
-=======
-          Authorization: localStorage.getItem("token") || "",
->>>>>>> fa11b1cc25f48465ee748947c0713874aae21b57
+    const title = titleRef.current?.value?.trim();
+    const link = linkRef.current?.value?.trim();
+
+    // Validate inputs
+    if (!title || !link) {
+      setError("Please fill in all fields");
+      return;
+    }
+
+    // Validate link format based on type
+    if (
+      type === ContentType.Youtube &&
+      !link.includes("youtube.com/watch?v=")
+    ) {
+      setError("Please enter a valid YouTube video URL");
+      return;
+    }
+    if (
+      type === ContentType.Twitter &&
+      !link.includes("twitter.com/") &&
+      !link.includes("x.com/")
+    ) {
+      setError("Please enter a valid Twitter/X post URL");
+      return;
+    }
+
+    try {
+      setError(null);
+      setIsSubmitting(true);
+      await axios.post(
+        `${BACKEND_URL}/api/v1/content`,
+        {
+          link,
+          title,
+          type,
         },
-      }
-    );
-    onClose();
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
+          },
+        }
+      );
+      onClose();
+    } catch (error: any) {
+      console.error("Error adding content:", error);
+      setError(
+        error.response?.data?.message ||
+          "Failed to add content. Please try again."
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -83,6 +117,14 @@ export function CreateContentModal({ open, onClose }: CreateContentModalProps) {
                 <h2 className="text-2xl font-bold text-center mb-4 text-purple-700">
                   Add New Content
                 </h2>
+                {error && (
+                  <div
+                    className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4"
+                    role="alert"
+                  >
+                    <span className="block sm:inline">{error}</span>
+                  </div>
+                )}
                 <div className="w-full flex flex-col gap-2 mb-2">
                   <Input reference={titleRef} placeholder="Title" />
                   <Input reference={linkRef} placeholder="Link" />
@@ -110,8 +152,9 @@ export function CreateContentModal({ open, onClose }: CreateContentModalProps) {
                   <Button
                     onClick={addContent}
                     variant="primary"
-                    text="Submit"
+                    text={isSubmitting ? "Adding..." : "Submit"}
                     fullWidth={true}
+                    disabled={isSubmitting}
                   />
                 </div>
               </span>

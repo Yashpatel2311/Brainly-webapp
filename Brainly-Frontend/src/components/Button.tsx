@@ -8,6 +8,7 @@ interface Buttonprops {
   fullWidth?: boolean;
   loading?: boolean;
   type?: "button" | "submit" | "reset";
+  disabled?: boolean;
 }
 
 const variantClasses = {
@@ -25,16 +26,20 @@ export function Button({
   fullWidth,
   onClick,
   type = "button",
+  disabled = false,
 }: Buttonprops) {
   return (
     <button
       type={type}
       onClick={onClick}
+      disabled={disabled}
       className={
         variantClasses[variant] +
         " " +
         defaultStyle +
-        `${fullWidth ? " w-full flex justify-center items-center" : ""}`
+        `${fullWidth ? " w-full flex justify-center items-center" : ""} ${
+          disabled ? "disabled:bg-gray-400 disabled:cursor-not-allowed" : ""
+        }`
       }
     >
       <div className="pr-2">{startIcon}</div>

@@ -1,5 +1,4 @@
 import { ReactElement } from "react";
-<<<<<<< HEAD
 import { motion } from "framer-motion";
 
 interface SidebarItemProps {
@@ -8,14 +7,11 @@ interface SidebarItemProps {
   isSelected?: boolean;
   onClick?: () => void;
 }
-=======
->>>>>>> fa11b1cc25f48465ee748947c0713874aae21b57
 
 export function SidebarItem({
   text,
   icon,
-<<<<<<< HEAD
-  isSelected,
+  isSelected = false,
   onClick,
 }: SidebarItemProps) {
   return (
@@ -34,16 +30,5 @@ export function SidebarItem({
         {text}
       </div>
     </motion.div>
-=======
-}: {
-  text: string;
-  icon: ReactElement;
-}) {
-  return (
-    <div className="flex items-center text-white py-2 cursor-pointer hover:bg-gray-700 rounded-lg max-w-48 pl-4 pr-2 gap-4 transition-all duration-200">
-      <div>{icon}</div>
-      <div className="text-lg font-medium">{text}</div>
-    </div>
->>>>>>> fa11b1cc25f48465ee748947c0713874aae21b57
   );
 }

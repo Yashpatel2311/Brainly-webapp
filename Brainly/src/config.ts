@@ -1,11 +1,11 @@
-<<<<<<< HEAD
-export const JWT_SECRET = "MaiNahiBatunga";
+import dotenv from "dotenv";
+
+// Load environment variables
+dotenv.config();
+
+// Environment variables with fallbacks
+export const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
 export const MONGODB_URI =
-  "mongodb+srv://theyashpatel2311:theyashpatel.2311@cluster0.taqoa.mongodb.net/brainly-database";
+  process.env.MONGODB_URI || "mongodb://localhost:27017/brainly";
 export const PORT = process.env.PORT || 3000;
-=======
-export const JWT_SECRET = "MaiNahiBatunga";
-export const MONGODB_URI =
-  "mongodb+srv://theyashpatel2311:theyashpatel.2311@cluster0.taqoa.mongodb.net/brainly-database";
-export const PORT = process.env.PORT || 3000;
->>>>>>> fa11b1cc25f48465ee748947c0713874aae21b57
+export const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";

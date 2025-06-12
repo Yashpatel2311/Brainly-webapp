@@ -1,34 +1,44 @@
 {
-  "name": "brainely",
+  "name": "brainly-backend",
   "version": "1.0.0",
-  "main": "index.js",
+  "description": "Backend server for Brainly application",
+  "main": "dist/index.js",
   "scripts": {
-    "build": "tsc -b",
+    "build": "tsc",
     "start": "node dist/index.js",
-    "dev": "npm run build && npm run start"
+    "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
+    "lint": "eslint . --ext .ts",
+    "test": "jest"
   },
-  "keywords": [],
+  "keywords": [
+    "brainly",
+    "backend",
+    "api"
+  ],
   "author": "",
   "license": "ISC",
-  "description": "",
   "dependencies": {
-    "@types/cors": "^2.8.17",
-    "@types/express": "^4.17.21",
-    "@types/jsonwebtoken": "^9.0.5",
-    "@types/node": "^20.11.19",
+    "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
     "express": "^4.18.2",
+    "express-rate-limit": "^7.1.5",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^7.6.8",
-<<<<<<< HEAD
-    "openai": "^5.3.0",
-    "typescript": "^5.3.3"
+    "mongoose": "^7.6.8"
   },
   "devDependencies": {
-    "@types/axios": "^0.9.36",
-    "@types/cheerio": "^0.22.35"
-=======
+    "@types/bcryptjs": "^2.4.6",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/jest": "^29.5.12",
+    "@types/jsonwebtoken": "^9.0.5",
+    "@types/node": "^20.11.19",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
+    "eslint": "^8.56.0",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.2",
+    "ts-node-dev": "^2.0.0",
     "typescript": "^5.3.3"
->>>>>>> fa11b1cc25f48465ee748947c0713874aae21b57
   }
 }
