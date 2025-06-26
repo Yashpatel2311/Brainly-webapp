@@ -1,0 +1,34 @@
+{
+  "name": "brainly",
+  "version": "1.0.0",
+  "description": "Brainly - A platform for sharing and discovering content",
+  "private": true,
+  "workspaces": [
+    "Brainly",
+    "Brainly-Frontend"
+  ],
+  "scripts": {
+    "dev:backend": "cd Brainly && npm run dev",
+    "dev:frontend": "cd Brainly-Frontend && npm run dev",
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "build": "npm run build:backend && npm run build:frontend",
+    "build:backend": "cd Brainly && npm run build",
+    "build:frontend": "cd Brainly-Frontend && npm run build",
+    "install:all": "npm install && npm run install:backend && npm run install:frontend",
+    "install:backend": "cd Brainly && npm install",
+    "install:frontend": "cd Brainly-Frontend && npm install",
+    "lint": "npm run lint:backend && npm run lint:frontend",
+    "lint:backend": "cd Brainly && npm run lint",
+    "lint:frontend": "cd Brainly-Frontend && npm run lint",
+    "test": "npm run test:backend && npm run test:frontend",
+    "test:backend": "cd Brainly && npm run test",
+    "test:frontend": "cd Brainly-Frontend && npm run test"
+  },
+  "dependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.19",
+    "typescript": "^5.3.3"
+  }
+}
