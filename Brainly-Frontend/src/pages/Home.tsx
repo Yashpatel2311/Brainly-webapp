@@ -87,7 +87,7 @@ export function Home() {
           transition={{ duration: 0.8 }}
           className="flex flex-col items-center"
         >
-          <BrainIcon className="w-32 h-32 mb-6 animate-float" />
+          <BrainIcon className="w-32 h-32 mb-6 animate-float" color="#fff" />
           <motion.h1
             style={{ x: parallaxX, y: parallaxY }}
             className="text-5xl md:text-6xl font-extrabold text-white drop-shadow-lg mb-4 text-center"

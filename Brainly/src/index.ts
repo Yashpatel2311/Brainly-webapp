@@ -119,13 +119,10 @@ app.post("/api/v1/signup", authLimiter, (async (
       return;
     }
 
-    // Hash password before saving
-    const hashedPassword = await bcrypt.hash(password, 10);
-
     const newUser = await Usermodel.create({
       username,
       email,
-      password: hashedPassword,
+      password, // plain password, let pre-save hook hash it
       createdAt: new Date(),
     });
 
