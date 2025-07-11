@@ -20,3 +20,71 @@ Keep an organized library of valuable resources.
 🚀 Contributions & Feedback
 We welcome feedback and contributions! Feel free to open issues, submit PRs, or share ideas to improve this app.
 
+Directory structure:
+└── yashpatel2311-brainly-webapp/
+    ├── README.md
+    ├── package.json
+    ├── vercel.json
+    ├── Brainly/
+    │   ├── package.json
+    │   ├── tsconfig.json
+    │   ├── tsconfig.tsbuildinfo
+    │   └── src/
+    │       ├── config.ts
+    │       ├── db.ts
+    │       ├── index.ts
+    │       ├── middleware.ts
+    │       ├── override.d.ts
+    │       └── utils.ts
+    └── Brainly-Frontend/
+        ├── README.md
+        ├── eslint.config.js
+        ├── index.html
+        ├── package.json
+        ├── postcss.config.js
+        ├── tailwind.config.js
+        ├── tsconfig.app.json
+        ├── tsconfig.json
+        ├── tsconfig.node.json
+        ├── vite.config.ts
+        └── src/
+            ├── App.tsx
+            ├── config.ts
+            ├── index.css
+            ├── main.tsx
+            ├── SplashScreen.tsx
+            ├── vite-env.d.ts
+            ├── assets/
+            │   ├── bulb.json
+            │   ├── creativity.json
+            │   ├── organize.json
+            │   ├── share.json
+            │   └── upgrade.json
+            ├── components/
+            │   ├── Button.tsx
+            │   ├── Card.tsx
+            │   ├── CreateContentModal.tsx
+            │   ├── Input.tsx
+            │   ├── Sidebar.tsx
+            │   └── SidebarItem.tsx
+            ├── contexts/
+            │   └── AuthContext.tsx
+            ├── hooks/
+            │   └── useContent.tsx
+            ├── Icons/
+            │   ├── BrainIcon.tsx
+            │   ├── CrossIcon.tsx
+            │   ├── Logo.tsx
+            │   ├── PlusIcon.tsx
+            │   ├── ShareIcon.tsx
+            │   ├── SignOutIcon.tsx
+            │   ├── TrashIcon.tsx
+            │   ├── TwitterIcon.tsx
+            │   └── YoutubeIcon.tsx
+            ├── pages/
+            │   ├── dashboard.tsx
+            │   ├── Home.tsx
+            │   ├── Signin.tsx
+            │   └── Signup.tsx
+            └── services/
+                └── api.ts
